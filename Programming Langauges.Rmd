@@ -137,6 +137,7 @@ plot1 + plot2 +
   plot_layout(ncol = 2) +
   plot_annotation(
     title = "blank",
+    subtitle = "blank",
     caption = "blank",
     # theme = theme(
     #   plot.background = element_rect(fill = "#F0F0F2", color = NA),

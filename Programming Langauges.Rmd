@@ -34,9 +34,9 @@ df <-
   filter(type == 'pl') %>%
   mutate(
     lab1 = 
-      glue("<span style=font-size:18pt>**{title} | {appeared}**</span><br><span style=font-size:16pt>{number_of_users}</span>"),
+      glue("<span style=font-size:16pt>**{title} | {appeared}**</span><br><span style=font-size:14pt>{number_of_users}</span>"),
     lab2 =
-      glue("<span style=font-size:18pt>**{title} | {appeared}**</span><br><span style=font-size:16pt>{number_of_jobs}</span>"),
+      glue("<span style=font-size:16pt>**{title} | {appeared}**</span><br><span style=font-size:14pt>{number_of_jobs}</span>"),
     color = case_when(
       title == "R" ~ "dark",
       TRUE ~ "light"
@@ -51,6 +51,24 @@ df %>%
   arrange(-number_of_users) %>%
   slice_head(n=10) %>%
   ggplot(aes(x = number_of_users, y = fct_reorder(title, number_of_users))) +
-  geom_col() +
-  geom_richtext(aes(label = lab1)
+  geom_col(aes(fill = color), guide = FALSE) +
+  geom_richtext(aes(label = lab1), hjust=1, fill=NA, label.colour=NA, lineheight=.9) +
+  
+  labs(
+    title = "blank",
+    fill = NULL,
+    x = NULL,
+    y = NULL
+  )+
+  
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "grey70", color =  "grey70"),
+    plot.margin = margin(10,10,10,10),
+    plot.title.position = "plot",
+    
+    plot.title = element_markdown(),
+    
+    axis.text = element_blank()
+  )
 ```

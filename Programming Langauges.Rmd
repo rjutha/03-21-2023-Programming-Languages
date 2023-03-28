@@ -1,0 +1,56 @@
+---
+title: "Programming Languages"
+author: "Rahim Jutha"
+date: "2023-03-26"
+output: html_document
+---
+
+# Load Packages
+
+Important Variables
+- title
+- type
+- appeared
+- number_of_users
+- number_of_jobs
+
+```{r}
+library(tidyverse)
+library(glue)
+library(ggtext)
+```
+
+# Load Data
+
+```{r}
+data <- read_csv("data/languages.csv")
+```
+
+# Pre-processing
+```{r}
+df <- 
+  data %>%
+  select(title, type, appeared, number_of_jobs, number_of_users) %>%
+  filter(type == 'pl') %>%
+  mutate(
+    lab1 = 
+      glue("<span style=font-size:18pt>**{title} | {appeared}**</span><br><span style=font-size:16pt>{number_of_users}</span>"),
+    lab2 =
+      glue("<span style=font-size:18pt>**{title} | {appeared}**</span><br><span style=font-size:16pt>{number_of_jobs}</span>"),
+    color = case_when(
+      title == "R" ~ "dark",
+      TRUE ~ "light"
+    )
+  )
+```
+
+
+# Visualisation
+```{r}
+df %>%
+  arrange(-number_of_users) %>%
+  slice_head(n=10) %>%
+  ggplot(aes(x = number_of_users, y = fct_reorder(title, number_of_users))) +
+  geom_col() +
+  geom_richtext(aes(label = lab1)
+```

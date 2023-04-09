@@ -5,7 +5,7 @@ date: "2023-03-26"
 output: html_document
 ---
 
-# Load Packages
+# Introduction
 
 Important Variables
 - title
@@ -13,6 +13,10 @@ Important Variables
 - appeared
 - number_of_users
 - number_of_jobs
+
+# Load Packages
+
+The given code block loads several R packages that are commonly used for data manipulation, visualization, and formatting in data analysis and visualization tasks. These packages include tidyverse for data manipulation and visualization, glue for dynamic generation of text, ggtext for rendering formatted text in plots, scales for formatting and scaling data in visualizations, ggview for creating interactive plots, showtext for displaying text in plots using various fonts, and patchwork for combining multiple plots into a single plot.
 
 ```{r}
 library(tidyverse)
@@ -26,10 +30,14 @@ library(patchwork)
 
 # Load Data
 
+The given code reads a CSV file named "languages.csv" and stores its contents into an R object called data using the read_csv() function from the tidyverse package.
+
 ```{r}
 data <- read_csv("data/languages.csv")
 ```
 # Load Fonts
+
+The given code in R adds three Google fonts, "Roboto Condensed", "Bebas Neue", and "Oswald", to the available fonts in the current R session using the font_add_google() function from the showtext package. It then sets the default font to be used in plots to "Roboto Condensed" using showtext_auto() function. Finally, it sets the DPI (dots per inch) for rendering plots to 300 using showtext_opts() function, which affects the resolution and quality of the generated plots when saved to image files.
 
 ```{r}
 font_add_google(name = "Roboto Condensed", family = "Roboto Condensed")
@@ -40,6 +48,9 @@ showtext_opts(dpi = 300)
 ```
 
 # Pre-processing
+
+The given R code creates a new data frame df by selecting specific columns, filtering rows based on a condition, and adding new columns with formatted text strings and color codes using the mutate() function. The title column is modified to replace "Arduino Programming Language" with "Arduino" using case_when(). Two new columns, lab1 and lab2, are created with formatted text strings that include values from title, appeared, number_of_users, and number_of_jobs columns using the glue() function. Another new column, color, is created with color codes based on the condition that if title is "R", the color should be set to "dark", otherwise "light".
+
 ```{r}
 df <- 
   data %>%
@@ -47,7 +58,7 @@ df <-
   filter(type == 'pl') %>%
   mutate(
     title = case_when(
-      title == "Arduino Programming Language" ~ "Arudino",
+      title == "Arduino Programming Language" ~ "Arduino",
       TRUE ~ title
     ),
     lab1 = 
@@ -63,6 +74,9 @@ df <-
 
 
 # Visualisation
+
+The provided R code creates a bar chart (plot1) using ggplot2. The df data frame is sorted by number_of_users in descending order, and the top 10 rows are selected. The chart displays number_of_users on the x-axis and title on the y-axis, with bars colored based on the color column. Formatted text labels (lab1) are added to the bars using geom_richtext(). The plot title, legend labels, and axis labels are customized using labs(). The plot theme is set using theme_minimal() and further customized with theme(). The plot's height and width are set using ggview()
+
 ```{r}
 plot1 <- 
   df %>%
@@ -98,6 +112,8 @@ plot1 <-
 
 ggview(units = "in", height = 7, width = 5)
 ```
+
+The provided R code creates a bar chart (plot2) using ggplot2. The df data frame is sorted by number_of_users in descending order, and the top 10 rows are selected. The chart displays number_of_jobs on the x-axis and title on the y-axis, with bars colored based on the color column. Formatted text labels (lab1) are added to the bars using geom_richtext(). The plot title, legend labels, and axis labels are customized using labs(). The plot theme is set using theme_minimal() and further customized with theme(). The plot's height and width are set using ggview()
 
 ```{r}
 plot2 <- 
@@ -135,16 +151,18 @@ plot2 <-
 ggview(units = "in", height = 7, width = 5)
 ```
 
+The provided R code combines two plots, plot1 and plot2, into a grid layout with two columns using plot_layout(). It also adds a custom plot annotation that includes a title, subtitle, and caption using plot_annotation(). The title and subtitle are formatted using HTML and custom font families (Oswald and Roboto Condensed) and positioned using element_markdown() and margin() functions. The plot background and caption are also customized using element_rect() and element_markdown() functions. Finally, the plot is saved in PNG and SVG formats using ggsave() function with specified height and width.
+
 ```{r}
 plot1 + plot2 +
   plot_layout(ncol = 2) +
   plot_annotation(
-    title = "<span style=font-size:30pt>*R cracks rop 10 programming languages for users & jobs*</span>",
-    subtitle = "<span style=font-size:18pt>R is a programming language and software environment used for data analysis, statistical<br>computing, and graphics. It's open-source, popular among statisticians and data scientists,<br> and has a large collection of packages for handling and manipulating data, visualizing results,<br> and running statistical models.</span>",
+    title = "<span style=font-size:30pt>*R cracks top 10 programming languages for users & jobs*</span>",
+    subtitle = "<span style=font-size:18pt>R is a programming language and software environment made in 1993 used for data analysis,<br>statistical computing, and graphics. It's open-source, popular among statisticians and data<br>scientists, and has a large collection of packages for handling and manipulating data,<br>visualizing results, and running statistical models.</span>",
     caption = "<span style=font-size:12pt>Filtered to only include programming languages (excluding Query/Markup Languages).<br>Graphic by Rahim Jutha | Source: _Programming Language Database_</span>",
     theme = theme(
       plot.background = element_rect(fill = "grey90", color = NA),
-      panel.background = element_rect(fill = "#grey90", color = NA),
+      panel.background = element_rect(fill = "grey90", color = NA),
       
       plot.title = element_markdown(family = "Oswald", hjust = .5, margin = margin(t=10,b=10)),
       plot.caption = element_markdown(family = "Roboto Condensed"),
